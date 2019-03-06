@@ -520,8 +520,9 @@ static void wpa_supplicant_cleanup(struct wpa_supplicant *wpa_s)
 #ifdef CONFIG_TDLS
 	wpa_tdls_deinit(wpa_s->wpa);
 #endif /* CONFIG_TDLS */
-
+#ifndef CONFIG_NO_WPA
 	wmm_ac_clear_saved_tspecs(wpa_s);
+#endif /* CONFIG_NO_WPA */
 	pmksa_candidate_free(wpa_s->wpa);
 	wpa_sm_deinit(wpa_s->wpa);
 	wpa_s->wpa = NULL;
@@ -630,8 +631,9 @@ static void wpa_supplicant_cleanup(struct wpa_supplicant *wpa_s)
 		wpabuf_free(wpa_s->vendor_elem[i]);
 		wpa_s->vendor_elem[i] = NULL;
 	}
-
+#ifndef CONFIG_NO_WPA
 	wmm_ac_notify_disassoc(wpa_s);
+#endif /* CONFIG_NO_WPA */
 
 	wpa_s->sched_scan_plans_num = 0;
 	os_free(wpa_s->sched_scan_plans);
@@ -946,9 +948,10 @@ void wpa_supplicant_set_state(struct wpa_supplicant *wpa_s,
 
 	if (state == WPA_DISCONNECTED || state == WPA_INACTIVE)
 		wpa_supplicant_start_autoscan(wpa_s);
-
+#ifndef CONFIG_NO_WPA
 	if (old_state >= WPA_ASSOCIATED && wpa_s->wpa_state < WPA_ASSOCIATED)
 		wmm_ac_notify_disassoc(wpa_s);
+#endif /* CONFIG_NO_WPA */
 
 	if (wpa_s->wpa_state != old_state) {
 		wpas_notify_state_changed(wpa_s, wpa_s->wpa_state, old_state);
@@ -1887,8 +1890,9 @@ void wpa_supplicant_associate(struct wpa_supplicant *wpa_s,
 		rand_style = wpa_s->conf->mac_addr;
 	else
 		rand_style = ssid->mac_addr;
-
+#ifndef CONFIG_NO_WPA
 	wmm_ac_clear_saved_tspecs(wpa_s);
+#endif /* CONFIG_NO_WPA */
 	wpa_s->reassoc_same_bss = 0;
 	wpa_s->reassoc_same_ess = 0;
 #ifdef CONFIG_TESTING_OPTIONS
@@ -1899,7 +1903,9 @@ void wpa_supplicant_associate(struct wpa_supplicant *wpa_s,
 		wpa_dbg(wpa_s, MSG_DEBUG, "Re-association to the same ESS");
 		wpa_s->reassoc_same_ess = 1;
 		if (wpa_s->current_bss && wpa_s->current_bss == bss) {
+#ifndef CONFIG_NO_WPA
 			wmm_ac_save_tspecs(wpa_s);
+#endif /* CONFIG_NO_WPA */
 			wpa_s->reassoc_same_bss = 1;
 		}
 	}

@@ -114,7 +114,6 @@ OBJS_c = wpa_cli.o ../src/common/wpa_ctrl.o
 OBJS_c += ../src/utils/wpa_debug.o
 OBJS_c += ../src/utils/common.o
 OBJS_c += ../src/common/cli.o
-OBJS += wmm_ac.o
 
 ifndef CONFIG_OS
 ifdef CONFIG_NATIVE_WINDOWS
@@ -339,6 +338,7 @@ OBJS += ../src/rsn_supp/preauth.o
 OBJS += ../src/rsn_supp/pmksa_cache.o
 OBJS += ../src/rsn_supp/wpa_ie.o
 OBJS += ../src/common/wpa_common.o
+OBJS += wmm_ac.o
 NEED_AES=y
 NEED_SHA1=y
 NEED_MD5=y

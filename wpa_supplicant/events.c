@@ -2815,7 +2815,7 @@ static void wpa_supplicant_event_assoc(struct wpa_supplicant *wpa_s,
 #endif /* CONFIG_IBSS_RSN */
 
 	wpas_wps_notify_assoc(wpa_s, bssid);
-
+#ifndef CONFIG_NO_WPA
 	if (data) {
 		wmm_ac_notify_assoc(wpa_s, data->assoc_info.resp_ies,
 				    data->assoc_info.resp_ies_len,
@@ -2824,6 +2824,7 @@ static void wpa_supplicant_event_assoc(struct wpa_supplicant *wpa_s,
 		if (wpa_s->reassoc_same_bss)
 			wmm_ac_restore_tspecs(wpa_s);
 	}
+#endif /* CONFIG_NO_WPA */
 
 #ifdef CONFIG_FILS
 	if (wpa_key_mgmt_fils(wpa_s->key_mgmt)) {
@@ -3651,7 +3652,9 @@ static void wpas_event_rx_mgmt_action(struct wpa_supplicant *wpa_s,
 		MAC2STR(mgmt->sa), category, (int) plen, freq);
 
 	if (category == WLAN_ACTION_WMM) {
+#ifndef CONFIG_NO_WPA
 		wmm_ac_rx_action(wpa_s, mgmt->da, mgmt->sa, payload, plen);
+#endif /* CONFIG_NO_WPA */
 		return;
 	}
 
